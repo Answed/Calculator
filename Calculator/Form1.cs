@@ -91,5 +91,32 @@ namespace Calculator
         {
             textBox1.Text += ")";
         }
+
+        private void buttonSqare_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        // Delets the last Input made in the Textfield.
+        private void buttonDel_Click(object sender, EventArgs e)
+        {
+            // The If Statement ensures that the Index doesen't get out of bounds.
+            if (textBox1.Text.Length >= 1)
+            {
+                textBox1.Text = textBox1.Text.Remove(textBox1.Text.Length - 1);
+            }
+        }
+
+        // Clears/Resets the string from the text box.
+        private void buttonClear_Click(object sender, EventArgs e)
+        {
+            textBox1.Text = "";
+        }
+
+        private void buttonEqual_Click(object sender, EventArgs e)
+        {
+
+        }
+
     }
 }
