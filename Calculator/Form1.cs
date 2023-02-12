@@ -60,21 +60,25 @@ namespace Calculator
         private void buttonDiv_Click(object sender, EventArgs e)
         {
             textBox1.Text += "/";
+            calculatorLogic.AddItemsToItemsList(textBox1.Text);
         }
 
         private void buttonMulti_Click(object sender, EventArgs e)
         {
             textBox1.Text += "*";
+            calculatorLogic.AddItemsToItemsList(textBox1.Text);
         }
 
         private void buttonSub_Click(object sender, EventArgs e)
         {
             textBox1.Text += "-";
+            calculatorLogic.AddItemsToItemsList(textBox1.Text);
         }
 
         private void buttonAdd_Click(object sender, EventArgs e)
         {
             textBox1.Text += "+";
+            calculatorLogic.AddItemsToItemsList(textBox1.Text);
         }
 
         private void buttonDot_Click(object sender, EventArgs e)
@@ -115,7 +119,8 @@ namespace Calculator
 
         private void buttonEqual_Click(object sender, EventArgs e)
         {
-
+            calculatorLogic.AddLastItemToList(textBox1.Text);
+            textBox1.Text = calculatorLogic.Calculate();
         }
 
     }

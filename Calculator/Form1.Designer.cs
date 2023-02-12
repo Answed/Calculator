@@ -1,4 +1,6 @@
-﻿namespace Calculator
+﻿using System.Net.Http.Headers;
+
+namespace Calculator
 {
     partial class MainWindow
     {
@@ -6,6 +8,7 @@
         ///  Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
+        private CalculatorLogic calculatorLogic = new CalculatorLogic();
 
         /// <summary>
         ///  Clean up any resources being used.
