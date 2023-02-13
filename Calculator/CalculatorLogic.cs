@@ -65,7 +65,15 @@ namespace Calculator
                 case 3:
                     return numbers[0] * numbers[1];
                 case 4:
-                    return numbers[0] / numbers[1];
+                    try // To Ensure that the result will still be calculated and doesen't crash the software -> Could be changed to just display an error Message if something like that happens.
+                    {
+                        return numbers[0] / numbers[2];
+                    }
+                    catch (DivideByZeroException)
+                    {
+                        MessageBox.Show($"Can't divide through 0. {numbers[0]} / {numbers[1]} is replaced by 0 ");
+                        return 0;
+                    }
                 default: return 0;
             }
           
