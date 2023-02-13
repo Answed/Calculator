@@ -17,10 +17,13 @@ namespace Calculator
         //Adds the number + the last math operator as seperate Items to the list
         public void AddItemsToItemsList(string textBox)
         {
-            string temp = textBox.Substring(nextNumberPosition, textBox.Length - 1 - nextNumberPosition); // Is needed to ensure that the numbers don't get saved twice
-            items.Add(temp);
-            items.Add(Char.ToString(textBox[textBox.Length-1]));
-            nextNumberPosition = textBox.Length; // Sets the position where the string will be read from the next time its called.
+            if (textBox.Length > 1) // When a negative number is written at the start it doesen't breaks the code. Later on it works as intended
+            {
+                string temp = textBox.Substring(nextNumberPosition, textBox.Length - 1 - nextNumberPosition); // Is needed to ensure that the numbers don't get saved twice
+                items.Add(temp);
+                items.Add(Char.ToString(textBox[textBox.Length - 1]));
+                nextNumberPosition = textBox.Length; // Sets the position where the string will be read from the next time its called.
+            }
         }
         //This saves everything after the last math operator to the list as one object
         public void AddLastItemToList(string lastItem)
@@ -37,7 +40,7 @@ namespace Calculator
             {
                 if (items[i] == "+")
                 {
-                    ChangeItemList(i - 1, i + 1, Addition(items[i-1], items[i + 1]));
+                    ChangeItemList(i - 1, i + 1, MathOperations(items[i-1], items[i + 1], 1));
                     break;
                 }
             }
@@ -46,30 +49,25 @@ namespace Calculator
                 return Calculate();
             else return items[0];
         }
-
-        // want to keep it around in the event of me wanting to change the structure a bit
-        /*private void PrioritySearch(List<string> itemList)
-        {
-            for (int i = 1; i < itemList.Count; i += 2)
-            {
-                if (itemList[i] == "+")
-                {
-                    ChangeItemList(i - 1, i + 1, Addition(itemList[i - 1], itemList[i + 1]));
-                    break;
-                }
-            }
-
-            if (itemList.Count > 1)
-                PrioritySearch(itemList);
-        }*/
-
+        
         // Mehtod i use for converting a pair and adding it. The result will be directly saved in the list
-        private float Addition(string num1, string num2)
+        private float MathOperations(string num1, string num2, int operation)
         {
             float[] numbers = new float[2];
            
             numbers = ConvertNumbers(num1, num2);
-            return numbers[0] + numbers[1];
+            switch (operation)
+            {
+                case 1:
+                    return numbers[0] + numbers[1];
+                case 2:
+                    return numbers[0] - numbers[1];
+                case 3:
+                    return numbers[0] * numbers[1];
+                case 4:
+                    return numbers[0] / numbers[1];
+                default: return 0;
+            }
           
         }
 
