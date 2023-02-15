@@ -1,3 +1,5 @@
+using System.Diagnostics;
+
 namespace Calculator
 {
     public partial class MainWindow : Form

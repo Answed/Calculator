@@ -36,38 +36,47 @@ namespace Calculator
         // When it found such a pair it changes the List directly and makes it smaller each time until the final result is calculated
         public string Calculate()
         {
-            for (int i = 1; i < items.Count; i += 2)
+            if (items.Contains("*") || items.Contains("/"))
+                FindMathOperatorInList(new string[] { "*", "/" });
+            if (items.Contains("+") || items.Contains("-"))
+                FindMathOperatorInList(new string[] { "+", "-" });
+            
+            nextNumberPosition = 0;
+            return items[0].ToString();
+        }
+
+        private void FindMathOperatorInList(string[] mathOperators)
+        {
+            for (int i = 1; i < items.Count; i++)
             {
-                if (items[i] == "+")
+                Debug.WriteLine(items[i]);
+                if (mathOperators.Contains(items[i])) // Checks if the item at position i is part of the selected math operators. If its true then it will be calculated and replaced by the result.
                 {
-                    ChangeItemList(i - 1, i + 1, MathOperations(items[i-1], items[i + 1], 1));
+                    ChangeItemList(i - 1, i + 1, MathOperations(items[i - 1], items[i + 1], items[i]));
                     break;
                 }
             }
-
             if (items.Count > 1)
-                return Calculate();
-            else return items[0];
+                FindMathOperatorInList(mathOperators);
         }
-        
-        // Mehtod i use for converting a pair and adding it. The result will be directly saved in the list
-        private float MathOperations(string num1, string num2, int operation)
+            // Method which calculates the pairs prior selected in Calculate
+        private float MathOperations(string num1, string num2, string operation)
         {
-            float[] numbers = new float[2];
+            float[] numbers = new float[2]; // I use floats and not ints because numbers can be decimals or be divided into decimals.
            
-            numbers = ConvertNumbers(num1, num2);
+            numbers = ConvertNumbers(num1, num2); // Numbers are saved as a string so i have to convert them.
             switch (operation)
             {
-                case 1:
+                case "+":
                     return numbers[0] + numbers[1];
-                case 2:
+                case "-":
                     return numbers[0] - numbers[1];
-                case 3:
+                case "*":
                     return numbers[0] * numbers[1];
-                case 4:
+                case "/":
                     try // To Ensure that the result will still be calculated and doesen't crash the software -> Could be changed to just display an error Message if something like that happens.
                     {
-                        return numbers[0] / numbers[2];
+                        return numbers[0] / numbers[1];
                     }
                     catch (DivideByZeroException)
                     {
@@ -94,7 +103,6 @@ namespace Calculator
             {
                 results[0] = int_num1;
                 results[1] = int_num2;
-                Debug.WriteLine(int_num1 + " " + int_num2);
                 return results;
             }
             else 
@@ -109,6 +117,7 @@ namespace Calculator
 
         private void ChangeItemList(int startIndex, int endIndex, float newValue)
         {
+            Debug.WriteLine(startIndex+ " " + endIndex);
             items.RemoveRange(startIndex, endIndex);
             items[startIndex] = newValue.ToString(); // replaces the first element of each pair. For example we have a pair of 2 + 4 it replaces the 2 with the 6
         }
