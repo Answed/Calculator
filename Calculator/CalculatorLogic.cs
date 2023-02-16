@@ -49,15 +49,11 @@ namespace Calculator
         {
             for (int i = 1; i < items.Count; i++)
             {
-                Debug.WriteLine(items[i]);
                 if (mathOperators.Contains(items[i])) // Checks if the item at position i is part of the selected math operators. If its true then it will be calculated and replaced by the result.
                 {
                     ChangeItemList(i - 1, i + 1, MathOperations(items[i - 1], items[i + 1], items[i]));
-                    break;
                 }
             }
-            if (items.Count > 1)
-                FindMathOperatorInList(mathOperators);
         }
             // Method which calculates the pairs prior selected in Calculate
         private float MathOperations(string num1, string num2, string operation)
