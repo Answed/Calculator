@@ -117,6 +117,7 @@ namespace Calculator
         private void buttonClear_Click(object sender, EventArgs e)
         {
             textBox1.Text = "";
+            calculatorLogic.ClearList();
         }
 
         private void buttonEqual_Click(object sender, EventArgs e)

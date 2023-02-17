@@ -32,6 +32,11 @@ namespace Calculator
             items.Add(temp);
         }
 
+        public void ClearList()
+        {
+            items.Clear();
+        }
+
         // Main function. Will later select the pairs baised of priority so (*/) > + -
         // When it found such a pair it changes the List directly and makes it smaller each time until the final result is calculated
         public string Calculate()
@@ -42,7 +47,9 @@ namespace Calculator
                 FindMathOperatorInList(new string[] { "+", "-" });
             
             nextNumberPosition = 0;
-            return items[0].ToString();
+            string result = items[0].ToString();
+            items.RemoveAt(0);
+            return result;
         }
 
         private void FindMathOperatorInList(string[] mathOperators)
@@ -52,8 +59,11 @@ namespace Calculator
                 if (mathOperators.Contains(items[i])) // Checks if the item at position i is part of the selected math operators. If its true then it will be calculated and replaced by the result.
                 {
                     ChangeItemList(i - 1, i + 1, MathOperations(items[i - 1], items[i + 1], items[i]));
+                    break;
                 }
             }
+            if (items.Count > 1)
+                FindMathOperatorInList(mathOperators);
         }
             // Method which calculates the pairs prior selected in Calculate
         private float MathOperations(string num1, string num2, string operation)
@@ -113,8 +123,8 @@ namespace Calculator
 
         private void ChangeItemList(int startIndex, int endIndex, float newValue)
         {
-            Debug.WriteLine(startIndex+ " " + endIndex);
-            items.RemoveRange(startIndex, endIndex);
+            Debug.WriteLine(startIndex+ " " + endIndex + " " + items.Count);
+            items.RemoveRange(startIndex + 1, endIndex);
             items[startIndex] = newValue.ToString(); // replaces the first element of each pair. For example we have a pair of 2 + 4 it replaces the 2 with the 6
         }
     }
