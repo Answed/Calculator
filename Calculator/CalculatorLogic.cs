@@ -41,6 +41,8 @@ namespace Calculator
         // When it found such a pair it changes the List directly and makes it smaller each time until the final result is calculated
         public string Calculate()
         {
+            if (items.Contains("^"))
+                FindMathOperatorInList(new string[] { "^" });
             if (items.Contains("*") || items.Contains("/"))
                 FindMathOperatorInList(new string[] { "*", "/" });
             if (items.Contains("+") || items.Contains("-"))
@@ -89,6 +91,8 @@ namespace Calculator
                         MessageBox.Show($"Can't divide through 0. {numbers[0]} / {numbers[1]} is replaced by 0 ");
                         return 0;
                     }
+                case "^":
+                    return float.Parse(Math.Pow(numbers[0], numbers[1]).ToString());
                 default: return 0;
             }
           

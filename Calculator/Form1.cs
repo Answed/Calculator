@@ -100,7 +100,9 @@ namespace Calculator
 
         private void buttonSqare_Click(object sender, EventArgs e)
         {
-
+            textBox1.Text += "^";
+            calculatorLogic.AddItemsToItemsList(textBox1.Text);
+            textBox1.Text += "2";
         }
 
         // Delets the last Input made in the Textfield.
