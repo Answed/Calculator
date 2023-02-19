@@ -53,6 +53,7 @@ namespace Calculator
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.buttonDel = new System.Windows.Forms.Button();
             this.buttonClear = new System.Windows.Forms.Button();
+            this.buttonPowerOf = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button0
@@ -273,9 +274,20 @@ namespace Calculator
             this.buttonClear.UseVisualStyleBackColor = true;
             this.buttonClear.Click += new System.EventHandler(this.buttonClear_Click);
             // 
+            // buttonPowerOf
+            // 
+            this.buttonPowerOf.Location = new System.Drawing.Point(22, 79);
+            this.buttonPowerOf.Name = "buttonPowerOf";
+            this.buttonPowerOf.Size = new System.Drawing.Size(70, 70);
+            this.buttonPowerOf.TabIndex = 22;
+            this.buttonPowerOf.Text = "x^n";
+            this.buttonPowerOf.UseVisualStyleBackColor = true;
+            this.buttonPowerOf.Click += new System.EventHandler(this.buttonPowerOf_Click);
+            // 
             // MainWindow
             // 
             this.ClientSize = new System.Drawing.Size(348, 551);
+            this.Controls.Add(this.buttonPowerOf);
             this.Controls.Add(this.buttonClear);
             this.Controls.Add(this.buttonDel);
             this.Controls.Add(this.textBox1);
@@ -329,5 +341,6 @@ namespace Calculator
         private TextBox textBox1;
         private Button buttonDel;
         private Button buttonClear;
+        private Button buttonPowerOf;
     }
 }

@@ -128,5 +128,10 @@ namespace Calculator
             textBox1.Text = calculatorLogic.Calculate();
         }
 
+        private void buttonPowerOf_Click(object sender, EventArgs e)
+        {
+            textBox1.Text += "^";
+            calculatorLogic.AddItemsToItemsList(textBox1.Text);
+        }
     }
 }
