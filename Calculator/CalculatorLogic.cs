@@ -22,6 +22,7 @@ namespace Calculator
                 string temp = textBox.Substring(nextNumberPosition, textBox.Length - 1 - nextNumberPosition); // Is needed to ensure that the numbers don't get saved twice
                 items.Add(temp);
                 items.Add(Char.ToString(textBox[textBox.Length - 1]));
+                foreach(string item in items) { Debug.WriteLine(item); }
                 nextNumberPosition = textBox.Length; // Sets the position where the string will be read from the next time its called.
             }
         }
