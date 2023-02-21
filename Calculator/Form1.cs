@@ -130,37 +130,6 @@ namespace Calculator
             calculatorLogic.AddItemsToItemsList(textBox1.Text);
         }
 
-        private void MainWindow_KeyDown(object sender, KeyEventArgs e)
-        {
-            switch (e.KeyCode)
-            {
-                case Keys.Add:
-                    textBox1.Text += "+";
-                    if (textBox1.Text.Length >= 1)
-                    {
-                        textBox1.Text = textBox1.Text.Remove(textBox1.Text.Length - 1);
-                    }
-                    calculatorLogic.AddItemsToItemsList(textBox1.Text);
-                    break;
-                case Keys.Subtract:
-                    calculatorLogic.AddItemsToItemsList(textBox1.Text);
-                    break;
-                case Keys.Multiply:
-                    calculatorLogic.AddItemsToItemsList(textBox1.Text);
-                    break;
-                case Keys.Divide:
-                    calculatorLogic.AddItemsToItemsList(textBox1.Text);
-                    break;
-                case Keys.Up:
-                    calculatorLogic.AddItemsToItemsList(textBox1.Text);
-                    break;
-                case Keys.Enter:
-                    calculatorLogic.AddLastItemToList(textBox1.Text);
-                    break;
-            }
-
-        }
-
         private void MathOperator(string mathOperator) // Just delets a lot of redundant code 
         {
             textBox1.Text += mathOperator;
