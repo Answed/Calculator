@@ -12,7 +12,8 @@ namespace Calculator
     {
         private int nextNumberPosition = 0;
 
-        private List<string> items = new List<string>();
+        private List<string> items = new List<string>(); // Saves all the inputs from the text field as seperated inputs.
+        private List<int> clampPositions = new List<int>(); // Saves the index positions from the () in items list.
 
         //Adds the number + the last math operator as seperate Items to the list
         public void AddItemsToItemsList(string textBox)
@@ -26,6 +27,15 @@ namespace Calculator
                 nextNumberPosition = textBox.Length; // Sets the position where the string will be read from the next time its called.
             }
         }
+
+        public void AddClampToList (string textBox)
+        {
+            items.Add(Char.ToString(textBox[textBox.Length - 1]));
+            clampPositions.Add(textBox.Length - 1);
+            nextNumberPosition++;
+            foreach (string item in items) { Debug.WriteLine(item); }
+        }
+
         //This saves everything after the last math operator to the list as one object
         public void AddLastItemToList(string lastItem)
         {
@@ -36,6 +46,7 @@ namespace Calculator
         public void ClearList()
         {
             items.Clear();
+            nextNumberPosition = 0;
         }
 
         // Main function. Will later select the pairs baised of priority so (*/) > + -

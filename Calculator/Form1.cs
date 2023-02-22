@@ -87,11 +87,13 @@ namespace Calculator
         private void buttonLeftClip_Click(object sender, EventArgs e)
         {
             textBox1.Text += "(";
+            calculatorLogic.AddClampToList(textBox1.Text);
         }
 
         private void buttonRightClip_Click(object sender, EventArgs e)
         {
             textBox1.Text += ")";
+            calculatorLogic.AddClampToList(textBox1.Text);
         }
 
         private void buttonSqare_Click(object sender, EventArgs e)
@@ -107,7 +109,7 @@ namespace Calculator
             // The If Statement ensures that the Index doesen't get out of bounds.
             if (textBox1.Text.Length >= 1)
             {
-                textBox1.Text = textBox1.Text.Remove(textBox1.Text.Length - 1);
+                textBox1.Text = textBox1.Text.Remove(textBox1.Text.Length - 1); // Will break the code when you remove a math operator 
             }
         }
 

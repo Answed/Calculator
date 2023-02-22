@@ -312,7 +312,6 @@ namespace Calculator
             this.Controls.Add(this.button0);
             this.KeyPreview = true;
             this.Name = "MainWindow";
-            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainWindow_KeyDown);
             this.ResumeLayout(false);
             this.PerformLayout();
 
