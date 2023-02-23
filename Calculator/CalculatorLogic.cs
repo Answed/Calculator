@@ -53,12 +53,15 @@ namespace Calculator
         // When it found such a pair it changes the List directly and makes it smaller each time until the final result is calculated
         public string Calculate()
         {
+            if (clampPositions.Count > 1)
+                CalculateClamps();
+
             if (items.Contains("^"))
-                FindMathOperatorInList(new string[] { "^" });
+                FindMathOperatorInList(1, items.Count, new string[] { "^" });
             if (items.Contains("*") || items.Contains("/"))
-                FindMathOperatorInList(new string[] { "*", "/" });
+                FindMathOperatorInList(1, items.Count, new string[] { "*", "/" });
             if (items.Contains("+") || items.Contains("-"))
-                FindMathOperatorInList(new string[] { "+", "-" });
+                FindMathOperatorInList(1, items.Count, new string[] { "+", "-" });
 
             nextNumberPosition = 0;
             string result = items[0].ToString();
@@ -66,15 +69,34 @@ namespace Calculator
             return result;
         }
 
-        private void FindMathOperatorInList(string[] mathOperators)
+        private void CalculateClamps()
         {
-            for (int i = 1; i < items.Count; i++)
+            //Defines the range where the clamps are located. The List ist divided in two to ensure that when there are multiple clamps the closes to each other are selected, so when (( )) the two in the middle will be selected first.
+            int openClamp = clampPositions[(clampPositions.Count / 2) - 1];
+            int closeClamp = clampPositions[(clampPositions.Count / 2)];
+
+            if (items.Contains("^"))
+                FindMathOperatorInList(openClamp, closeClamp, new string[] { "^" });
+            if (items.Contains("*") || items.Contains("/"))
+                FindMathOperatorInList(openClamp, closeClamp, new string[] { "*", "/" });
+            if (items.Contains("+") || items.Contains("-"))
+                FindMathOperatorInList(openClamp, closeClamp, new string[] { "+", "-" });
+            
+            // Replaces the result of the clamp with the open clamp and remvoes the old result and closed clamp.
+            items[openClamp] = items[openClamp + 1];
+            items.RemoveRange(openClamp + 1, 2);
+
+        } 
+
+        private void FindMathOperatorInList(int start, int end,string[] mathOperators)
+        {
+            for (int i = start; i < end; i++)
             {
                 if (mathOperators.Contains(items[i])) // Checks if the item at position i is part of the selected math operators. If its true then it will be calculated and replaced by the result.
                 {
                     ChangeItemList(i - 1, MathOperations(items[i - 1], items[i + 1], items[i]));
                     if (items.Intersect(mathOperators).Any())
-                        FindMathOperatorInList(mathOperators);
+                        FindMathOperatorInList(start, end,mathOperators);
                     break;
                 }
             }
