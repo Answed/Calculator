@@ -13,7 +13,8 @@ namespace Calculator
         private int nextNumberPosition = 0;
 
         private List<string> items = new List<string>(); // Saves all the inputs from the text field as seperated inputs.
-        private List<int> clampPositions = new List<int>(); // Saves the index positions from the () in items list.
+        private List<int> openClampPositions = new List<int>(); // Saves the index positions from the ( in items list.
+        private List<int> closeClampPositions = new List<int>(); // Saves the index positions from the ) in items list.
 
         //Adds the number + the last math operator as seperate Items to the list
         public void AddItemsToItemsList(string textBox)
@@ -31,9 +32,16 @@ namespace Calculator
         public void AddClampToList (string textBox)
         {
             items.Add(Char.ToString(textBox[textBox.Length - 1]));
-            clampPositions.Add(textBox.Length - 1);
-            nextNumberPosition++;
-            foreach (string item in items) { Debug.WriteLine(item); }
+            if (Char.ToString(textBox[textBox.Length - 1]) == "(")
+            {
+                openClampPositions.Add(textBox.Length - 1);
+                nextNumberPosition++;
+            }
+            else
+            {
+                closeClampPositions.Add(textBox.Length - 1);
+                nextNumberPosition++;
+            }
         }
 
         //This saves everything after the last math operator to the list as one object
@@ -53,8 +61,8 @@ namespace Calculator
         // When it found such a pair it changes the List directly and makes it smaller each time until the final result is calculated
         public string Calculate()
         {
-            if (clampPositions.Count > 1)
-                CalculateClamps();
+            if (openClampPositions.Count > 0)
+                FindClampPairs(); // Start of the Clamp calculations
 
             if (items.Contains("^"))
                 FindMathOperatorInList(1, items.Count, new string[] { "^" });
@@ -69,12 +77,49 @@ namespace Calculator
             return result;
         }
 
-        private void CalculateClamps()
+        private void FindClampPairs()
         {
-            //Defines the range where the clamps are located. The List ist divided in two to ensure that when there are multiple clamps the closes to each other are selected, so when (( )) the two in the middle will be selected first.
-            int openClamp = clampPositions[(clampPositions.Count / 2) - 1];
-            int closeClamp = clampPositions[(clampPositions.Count / 2)];
+            int smallest_diff = 50; 
+            int[] clampPair = new int[4];
 
+            for (int i = 0; i < openClampPositions.Count; i++)
+            {
+                for (int y = 0; y < closeClampPositions.Count; y++)
+                {
+                    if (smallest_diff > closeClampPositions[y] - openClampPositions[i])
+                    {
+                        smallest_diff = closeClampPositions[y] - openClampPositions[i];
+                        clampPair[0] = openClampPositions[i]; //Saves the Index Value from the open Clamp
+                        clampPair[1] = closeClampPositions[y]; // Saves the Index Value from the closed clamp
+                        clampPair[2] = i; // Saves the Index value from the open clamp from the openClampPosition List
+                        clampPair[3] = y; // Saves the Index value from the open clamp from the closeClampPosition List
+                    }
+
+                }
+            }
+
+            CalculateClamp(clampPair[0], clampPair[1]);
+
+
+
+            if (openClampPositions.Count > 0)
+            {
+                FindClampPairs();
+            }
+        }
+
+        private void FixClampPositions(int[] clampPair , int clampDiff)
+        {
+
+        }
+
+        private void RemoveClampsFromList()
+        {
+
+        }
+
+        private void CalculateClamp(int openClamp, int closeClamp)
+        {
             if (items.Contains("^"))
                 FindMathOperatorInList(openClamp, closeClamp, new string[] { "^" });
             if (items.Contains("*") || items.Contains("/"))
