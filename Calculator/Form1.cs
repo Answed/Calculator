@@ -93,7 +93,7 @@ namespace Calculator
         private void buttonRightClip_Click(object sender, EventArgs e)
         {
             textBox1.Text += ")";
-            calculatorLogic.AddClampToList(textBox1.Text);
+            calculatorLogic.AddItemsToItemsList(textBox1.Text);
         }
 
         private void buttonSqare_Click(object sender, EventArgs e)

@@ -24,24 +24,18 @@ namespace Calculator
                 string temp = textBox.Substring(nextNumberPosition, textBox.Length - 1 - nextNumberPosition); // Is needed to ensure that the numbers don't get saved twice
                 items.Add(temp);
                 items.Add(Char.ToString(textBox[textBox.Length - 1]));
-                foreach(string item in items) { Debug.WriteLine(item); }
                 nextNumberPosition = textBox.Length; // Sets the position where the string will be read from the next time its called.
+                if (items.Last() == ")")
+                    closeClampPositions.Add(textBox.Length - 1);
             }
         }
 
         public void AddClampToList (string textBox)
         {
             items.Add(Char.ToString(textBox[textBox.Length - 1]));
-            if (Char.ToString(textBox[textBox.Length - 1]) == "(")
-            {
-                openClampPositions.Add(textBox.Length - 1);
-                nextNumberPosition++;
-            }
-            else
-            {
-                closeClampPositions.Add(textBox.Length - 1);
-                nextNumberPosition++;
-            }
+            openClampPositions.Add(textBox.Length - 1);
+            nextNumberPosition++;
+           
         }
 
         //This saves everything after the last math operator to the list as one object
@@ -82,9 +76,11 @@ namespace Calculator
             int smallest_diff = 50; 
             int[] clampPair = new int[4];
 
-            for (int i = 0; i < openClampPositions.Count; i++)
+            Debug.WriteLine(closeClampPositions.Count);
+
+            for (int i = 0; i < openClampPositions.Count - 1; i++)
             {
-                for (int y = 0; y < closeClampPositions.Count; y++)
+                for (int y = 0; y < closeClampPositions.Count - 1; y++)
                 {
                     if (smallest_diff > closeClampPositions[y] - openClampPositions[i])
                     {
@@ -100,7 +96,7 @@ namespace Calculator
 
             CalculateClamp(clampPair[0], clampPair[1]);
 
-
+            FixClampPositions(clampPair, clampPair[1] - clampPair[0]);
 
             if (openClampPositions.Count > 0)
             {
@@ -110,12 +106,28 @@ namespace Calculator
 
         private void FixClampPositions(int[] clampPair , int clampDiff)
         {
+            // Changes the position from every clamp which comes after this pair to the right position.
+            // After Calculating a clamp the item list is smaller so every clamp which comes after the clamps calculated has a wrong value.
+            // Thats why we subbtract the diff from the clamp pair to ensure that the right position is saved. -> 
+            // The clamps are automatically moved in the item list but we also have to change the value of it in the clamp list.
+            for (int i  = clampPair[2]; i < openClampPositions.Count; i++)
+            {
+                if (clampPair[0] < openClampPositions[i])
+                    openClampPositions[i] -= clampDiff;
+            }
+            for (int i = clampPair[3]; i < closeClampPositions.Count; i++)
+            {
+                if (clampPair[1] < closeClampPositions[i])
+                    closeClampPositions[i] -= clampDiff;
+            }
 
+            RemoveClampsFromList(clampPair[2], clampPair[3]);
         }
 
-        private void RemoveClampsFromList()
+        private void RemoveClampsFromList(int openClampPosition, int closeClampPosition)
         {
-
+            openClampPositions.RemoveAt(openClampPosition);
+            closeClampPositions.RemoveAt(closeClampPosition);
         }
 
         private void CalculateClamp(int openClamp, int closeClamp)
