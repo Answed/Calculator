@@ -35,7 +35,6 @@ namespace Calculator
             items.Add(Char.ToString(textBox[textBox.Length - 1]));
             openClampPositions.Add(textBox.Length - 1);
             nextNumberPosition++;
-           
         }
 
         //This saves everything after the last math operator to the list as one object
@@ -55,6 +54,7 @@ namespace Calculator
         // When it found such a pair it changes the List directly and makes it smaller each time until the final result is calculated
         public string Calculate()
         {
+            Debug.WriteLine(openClampPositions[0] + " " + closeClampPositions[0]);
             if (openClampPositions.Count > 0)
                 FindClampPairs(); // Start of the Clamp calculations
 
@@ -76,21 +76,18 @@ namespace Calculator
             int smallest_diff = 50; 
             int[] clampPair = new int[4];
 
-            Debug.WriteLine(closeClampPositions.Count);
-
-            for (int i = 0; i < openClampPositions.Count - 1; i++)
+            for (int i = 0; i < openClampPositions.Count; i++)
             {
-                for (int y = 0; y < closeClampPositions.Count - 1; y++)
+                for (int y = 0; y < closeClampPositions.Count; y++)
                 {
-                    if (smallest_diff > closeClampPositions[y] - openClampPositions[i])
+                    if (smallest_diff >= (closeClampPositions[y] - openClampPositions[i]))
                     {
-                        smallest_diff = closeClampPositions[y] - openClampPositions[i];
                         clampPair[0] = openClampPositions[i]; //Saves the Index Value from the open Clamp
                         clampPair[1] = closeClampPositions[y]; // Saves the Index Value from the closed clamp
                         clampPair[2] = i; // Saves the Index value from the open clamp from the openClampPosition List
                         clampPair[3] = y; // Saves the Index value from the open clamp from the closeClampPosition List
+                        smallest_diff = closeClampPositions[y] - openClampPositions[i];
                     }
-
                 }
             }
 
