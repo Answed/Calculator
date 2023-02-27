@@ -11,6 +11,7 @@ namespace Calculator
     internal class CalculatorLogic
     {
         private int nextNumberPosition = 0;
+        private bool clampsclosed = false; // To ensure that the programm does not save empty strings after a clamp is closed. So when ) is pressed the next math operator would save an empty string without this bool.
 
         private List<string> items = new List<string>(); // Saves all the inputs from the text field as seperated inputs.
         private List<int> openClampPositions = new List<int>(); // Saves the index positions from the ( in items list.
@@ -21,12 +22,25 @@ namespace Calculator
         {
             if (textBox.Length > 1) // When a negative number is written at the start it doesen't breaks the code. Later on it works as intended
             {
-                string temp = textBox.Substring(nextNumberPosition, textBox.Length - 1 - nextNumberPosition); // Is needed to ensure that the numbers don't get saved twice
-                items.Add(temp);
-                items.Add(Char.ToString(textBox[textBox.Length - 1]));
-                nextNumberPosition = textBox.Length; // Sets the position where the string will be read from the next time its called.
-                if (items.Last() == ")")
+               if (clampsclosed)
+               {
+                    items.Add(Char.ToString(textBox[textBox.Length - 1]));
+                    nextNumberPosition = textBox.Length; // Sets the position where the string will be read from the next time its called.
+                    clampsclosed = false;
+               }
+               else
+               {
+                    string temp = textBox.Substring(nextNumberPosition, textBox.Length - 1 - nextNumberPosition); // Is needed to ensure that the numbers don't get saved twice
+                    items.Add(temp);
+                    items.Add(Char.ToString(textBox[textBox.Length - 1]));
+                    nextNumberPosition = textBox.Length; // Sets the position where the string will be read from the next time its called.
+               } 
+                
+               if (items.Last() == ")")
+               {
                     closeClampPositions.Add(textBox.Length - 1);
+                    clampsclosed = true;
+               }
             }
         }
 
@@ -54,7 +68,6 @@ namespace Calculator
         // When it found such a pair it changes the List directly and makes it smaller each time until the final result is calculated
         public string Calculate()
         {
-            Debug.WriteLine(openClampPositions[0] + " " + closeClampPositions[0]);
             if (openClampPositions.Count > 0)
                 FindClampPairs(); // Start of the Clamp calculations
 
@@ -93,7 +106,7 @@ namespace Calculator
 
             CalculateClamp(clampPair[0], clampPair[1]);
 
-            FixClampPositions(clampPair, clampPair[1] - clampPair[0]);
+            FixClampPositions(clampPair, clampPair[1] - clampPair[0] - 1);
 
             if (openClampPositions.Count > 0)
             {
@@ -119,6 +132,7 @@ namespace Calculator
             }
 
             RemoveClampsFromList(clampPair[2], clampPair[3]);
+            foreach(string item in items) { Debug.WriteLine(item);}
         }
 
         private void RemoveClampsFromList(int openClampPosition, int closeClampPosition)
