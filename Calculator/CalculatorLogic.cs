@@ -61,6 +61,8 @@ namespace Calculator
         public void ClearList()
         {
             items.Clear();
+            openClampPositions.Clear();
+            closeClampPositions.Clear();    
             nextNumberPosition = 0;
         }
 
@@ -70,11 +72,11 @@ namespace Calculator
         {
             if (openClampPositions.Count > 0)
                 FindClampPairs(); // Start of the Clamp calculations
-
             if (items.Contains("^"))
                 FindMathOperatorInList(1, items.Count, new string[] { "^" });
             if (items.Contains("*") || items.Contains("/"))
                 FindMathOperatorInList(1, items.Count, new string[] { "*", "/" });
+            foreach (string item in items) { Debug.WriteLine(item); }
             if (items.Contains("+") || items.Contains("-"))
                 FindMathOperatorInList(1, items.Count, new string[] { "+", "-" });
 
@@ -105,13 +107,13 @@ namespace Calculator
             }
 
             CalculateClamp(clampPair[0], clampPair[1]);
-
-            FixClampPositions(clampPair, clampPair[1] - clampPair[0] - 1);
-
+            RemoveClampsFromList(clampPair[2], clampPair[3]);
             if (openClampPositions.Count > 0)
             {
+                FixClampPositions(clampPair, clampPair[1] - clampPair[0] - 1);
                 FindClampPairs();
             }
+
         }
 
         private void FixClampPositions(int[] clampPair , int clampDiff)
@@ -130,9 +132,6 @@ namespace Calculator
                 if (clampPair[1] < closeClampPositions[i])
                     closeClampPositions[i] -= clampDiff;
             }
-
-            RemoveClampsFromList(clampPair[2], clampPair[3]);
-            foreach(string item in items) { Debug.WriteLine(item);}
         }
 
         private void RemoveClampsFromList(int openClampPosition, int closeClampPosition)
@@ -142,18 +141,32 @@ namespace Calculator
         }
 
         private void CalculateClamp(int openClamp, int closeClamp)
-        {
-            if (items.Contains("^"))
+        {;
+            var power = false;
+            var dot = false;
+            var line = false;
+
+            for (int i = openClamp; i < closeClamp; i++)
+            {
+                if (items[i] == "^")
+                    power= true;
+                if(items[i] == "*" && items[i] == "/")
+                    dot= true;
+                if (items[i] == "+" && items[i] == "-")
+                    line= true;
+            }
+
+            if (power)
                 FindMathOperatorInList(openClamp, closeClamp, new string[] { "^" });
-            if (items.Contains("*") || items.Contains("/"))
+            if(dot)
                 FindMathOperatorInList(openClamp, closeClamp, new string[] { "*", "/" });
-            if (items.Contains("+") || items.Contains("-"))
+            if (line)
                 FindMathOperatorInList(openClamp, closeClamp, new string[] { "+", "-" });
-            
+
+
             // Replaces the result of the clamp with the open clamp and remvoes the old result and closed clamp.
             items[openClamp] = items[openClamp + 1];
             items.RemoveRange(openClamp + 1, 2);
-
         } 
 
         private void FindMathOperatorInList(int start, int end,string[] mathOperators)
