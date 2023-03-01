@@ -69,15 +69,31 @@ namespace Calculator
         // Main function. Will later select the pairs baised of priority so (*/) > + -
         // When it found such a pair it changes the List directly and makes it smaller each time until the final result is calculated
         public string Calculate()
-        {
+        { 
+            //Saves the Value for if something contains it.
+            var power = false;
+            var dot = false;
+            var line = false;
+
             if (openClampPositions.Count > 0)
                 FindClampPairs(); // Start of the Clamp calculations
-            if (items.Contains("^"))
+            
+            // I could have used items.Contains but some guy in the internet told me that for loops are actually pretty nice so i use that to find if any math operators exist in my list
+            for (int i = 0; i < items.Count; i++)
+            {
+                if (items[i] == "^")
+                    power = true;
+                if (items[i] == "*" || items[i] == "/")
+                    dot = true;
+                if (items[i] == "+" || items[i] == "-")
+                    line = true;
+            }
+            if (power)
                 FindMathOperatorInList(1, items.Count, new string[] { "^" });
-            if (items.Contains("*") || items.Contains("/"))
+            if (dot)
                 FindMathOperatorInList(1, items.Count, new string[] { "*", "/" });
             foreach (string item in items) { Debug.WriteLine(item); }
-            if (items.Contains("+") || items.Contains("-"))
+            if (line)
                 FindMathOperatorInList(1, items.Count, new string[] { "+", "-" });
 
             nextNumberPosition = 0;
