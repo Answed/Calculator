@@ -95,7 +95,7 @@ namespace Calculator
             {
                 for (int y = 0; y < closeClampPositions.Count; y++)
                 {
-                    if (smallest_diff >= (closeClampPositions[y] - openClampPositions[i]))
+                    if (smallest_diff >= (closeClampPositions[y] - openClampPositions[i]) && openClampPositions[i] <  closeClampPositions[y])
                     {
                         clampPair[0] = openClampPositions[i]; //Saves the Index Value from the open Clamp
                         clampPair[1] = closeClampPositions[y]; // Saves the Index Value from the closed clamp
@@ -146,16 +146,19 @@ namespace Calculator
             var dot = false;
             var line = false;
 
+            Debug.WriteLine($"{openClamp} {closeClamp}");
+
             for (int i = openClamp; i < closeClamp; i++)
             {
                 if (items[i] == "^")
                     power= true;
-                if(items[i] == "*" && items[i] == "/")
+                if(items[i] == "*" || items[i] == "/")
                     dot= true;
-                if (items[i] == "+" && items[i] == "-")
+                if (items[i] == "+" || items[i] == "-")
                     line= true;
             }
 
+            Debug.WriteLine($"{power} {dot} {line}");
             if (power)
                 FindMathOperatorInList(openClamp, closeClamp, new string[] { "^" });
             if(dot)
@@ -171,7 +174,7 @@ namespace Calculator
 
         private void FindMathOperatorInList(int start, int end,string[] mathOperators)
         {
-            for (int i = start; i < end; i++)
+            for (int i = start; i < end - 1; i++)
             {
                 if (mathOperators.Contains(items[i])) // Checks if the item at position i is part of the selected math operators. If its true then it will be calculated and replaced by the result.
                 {
