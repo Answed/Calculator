@@ -59,6 +59,10 @@ namespace Calculator
             textBox1.Text += "9";
         }
 
+        private void negativButton_Click(object sender, EventArgs e)
+        {
+            textBox1.Text += "-";
+        }
         private void buttonDiv_Click(object sender, EventArgs e)
         {
             MathOperator("/");
