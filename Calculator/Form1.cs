@@ -115,6 +115,7 @@ namespace Calculator
             {
                 textBox1.Text = textBox1.Text.Remove(textBox1.Text.Length - 1); // Will break the code when you remove a math operator 
             }
+            calculatorLogic.FixListAfterDelete(textBox1.Text);
         }
 
         // Clears/Resets the string from the text box.

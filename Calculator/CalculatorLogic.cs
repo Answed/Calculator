@@ -66,6 +66,16 @@ namespace Calculator
             nextNumberPosition = 0;
         }
 
+        public void FixListAfterDelete(string textBox)
+        {
+            if (textBox.Length < nextNumberPosition) 
+            {
+                items.RemoveAt(items.Count - 1);
+                nextNumberPosition--;
+                clampsclosed= true;
+            }
+        }
+
         // Main function. Will later select the pairs baised of priority so (*/) > + -
         // When it found such a pair it changes the List directly and makes it smaller each time until the final result is calculated
         public string Calculate()
