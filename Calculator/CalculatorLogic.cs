@@ -11,7 +11,7 @@ namespace Calculator
     internal class CalculatorLogic
     {
         private int nextNumberPosition = 0;
-        private bool clampsclosed = false; // To ensure that the programm does not save empty strings after a clamp is closed. So when ) is pressed the next math operator would save an empty string without this bool.
+        private bool saveNumber = false; // To ensure that the programm does not save empty strings after a clamp is closed. So when ) is pressed the next math operator would save an empty string without this bool.
 
         private List<string> items = new List<string>(); // Saves all the inputs from the text field as seperated inputs.
         private List<int> openClampPositions = new List<int>(); // Saves the index positions from the ( in items list.
@@ -22,11 +22,11 @@ namespace Calculator
         {
             if (textBox.Length > 1) // When a negative number is written at the start it doesen't breaks the code. Later on it works as intended
             {
-               if (clampsclosed)
+               if (saveNumber)
                {
                     items.Add(Char.ToString(textBox[textBox.Length - 1]));
                     nextNumberPosition = textBox.Length; // Sets the position where the string will be read from the next time its called.
-                    clampsclosed = false;
+                    saveNumber = false;
                }
                else
                {
@@ -39,7 +39,7 @@ namespace Calculator
                if (items.Last() == ")")
                {
                     closeClampPositions.Add(textBox.Length - 1);
-                    clampsclosed = true;
+                    saveNumber = true;
                }
             }
         }
@@ -70,9 +70,35 @@ namespace Calculator
         {
             if (textBox.Length < nextNumberPosition) 
             {
-                items.RemoveAt(items.Count - 1);
-                nextNumberPosition--;
-                clampsclosed= true;
+                float number;
+                bool testIfNumber = float.TryParse(items[items.Count - 1], out number);
+                if (testIfNumber)
+                {
+                    Debug.WriteLine(nextNumberPosition);
+                    nextNumberPosition -= items[items.Count - 1].Length;
+                    Debug.WriteLine(nextNumberPosition);
+                    items.RemoveAt(items.Count - 1);
+                    saveNumber = false;
+                }
+                else if (items[items.Count - 1] == "(" )
+                {
+                    items.RemoveAt(items.Count - 1);
+                    nextNumberPosition--;
+                    openClampPositions.RemoveAt(openClampPositions.Count - 1);
+                }
+                else if (items[items.Count - 1] == ")")
+                {
+                    items.RemoveAt(items.Count - 1);
+                    nextNumberPosition--;
+                    closeClampPositions.RemoveAt(closeClampPositions.Count - 1);
+                    saveNumber = false;
+                }
+                else
+                {
+                    items.RemoveAt(items.Count - 1);
+                    saveNumber = true;
+                    nextNumberPosition--;
+                }
             }
         }
 
