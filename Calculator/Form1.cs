@@ -1,4 +1,4 @@
-using System.Diagnostics;
+﻿using System.Diagnostics;
 
 namespace Calculator
 {
@@ -140,6 +140,12 @@ namespace Calculator
         private void MathOperator(string mathOperator) // Just delets a lot of redundant code 
         {
             textBox1.Text += mathOperator;
+            calculatorLogic.AddItemsToItemsList(textBox1.Text);
+        }
+
+        private void buttonPi_Click(object sender, EventArgs e)
+        {
+            textBox1.Text += "3.14159265358979";
             calculatorLogic.AddItemsToItemsList(textBox1.Text);
         }
     }

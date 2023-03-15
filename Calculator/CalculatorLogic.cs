@@ -36,6 +36,14 @@ namespace Calculator
                     nextNumberPosition = textBox.Length; // Sets the position where the string will be read from the next time its called.
                } 
                 
+               /*if(items.Last() == "π")  # Will be changed in a way that the pi symbol is displayed in the ui not the number
+               {
+                    Debug.WriteLine(items[items.Count - 1]);
+                    items[items.Count - 1] = "3.14159";
+                    Debug.WriteLine(items[items.Count - 1]);
+                    saveNumber = true;
+               } */
+
                if (items.Last() == ")")
                {
                     closeClampPositions.Add(textBox.Length - 1);

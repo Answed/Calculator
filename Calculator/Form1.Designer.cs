@@ -55,6 +55,7 @@ namespace Calculator
             this.buttonClear = new System.Windows.Forms.Button();
             this.buttonPowerOf = new System.Windows.Forms.Button();
             this.negativButton = new System.Windows.Forms.Button();
+            this.buttonPi = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button0
@@ -295,9 +296,20 @@ namespace Calculator
             this.negativButton.UseVisualStyleBackColor = true;
             this.negativButton.Click += new System.EventHandler(this.negativButton_Click);
             // 
+            // buttonPi
+            // 
+            this.buttonPi.Location = new System.Drawing.Point(22, 459);
+            this.buttonPi.Name = "buttonPi";
+            this.buttonPi.Size = new System.Drawing.Size(70, 70);
+            this.buttonPi.TabIndex = 24;
+            this.buttonPi.Text = "π";
+            this.buttonPi.UseVisualStyleBackColor = true;
+            this.buttonPi.Click += new System.EventHandler(this.buttonPi_Click);
+            // 
             // MainWindow
             // 
             this.ClientSize = new System.Drawing.Size(348, 551);
+            this.Controls.Add(this.buttonPi);
             this.Controls.Add(this.negativButton);
             this.Controls.Add(this.buttonPowerOf);
             this.Controls.Add(this.buttonClear);
@@ -356,5 +368,6 @@ namespace Calculator
         private Button buttonClear;
         private Button buttonPowerOf;
         private Button negativButton;
+        private Button buttonPi;
     }
 }
